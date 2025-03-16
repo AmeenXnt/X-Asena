@@ -11,4 +11,4 @@ RUN apt-get update && \
 RUN git clone https://github.com/AmeenXnt/X-Asena.git /keiko
 WORKDIR /keiko
 RUN yarn install
-CMD ["npm", "start"]
+CMD ["node", "index.js"]
