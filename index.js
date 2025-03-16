@@ -105,8 +105,8 @@ async function connectToWA() {
             getandRequirePlugins();
             console.log("✅ Plugins Installed!");
             console.log("*Connected to WhatsApp*");
-            await delay(5000);
-            await session.sendMessage(conn.user.id, { text: `Connected` });
+            delay(5000);
+            conn.sendMessage(conn.user.id, { text: `Connected` });
         }
     });
 
