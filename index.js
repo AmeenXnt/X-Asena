@@ -29,7 +29,7 @@ async function initialize() {
       console.log("Fetching session from Mega.nz...");
       await fs.mkdir("session", { recursive: true });
 
-      const fileId = config.SESSION_ID.replace(/KeikoBot⚡|𝐂𝐫𝐨𝐧𝐞𝐱𝐁𝐨𝐭~/, "").trim();
+      var fileId = config.SESSION_ID.replace(/KeikoBot⚡|𝐂𝐫𝐨𝐧𝐞𝐱𝐁𝐨𝐭~/, "").trim();
       let file = File.fromURL(`https://mega.nz/file/${fileId}`);
       const sessionData = await new Promise((resolve, reject) => {
         file.download((err, data) => {
