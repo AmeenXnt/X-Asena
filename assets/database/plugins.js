@@ -34,9 +34,7 @@ async function getandRequirePlugins(conn) {
   console.log(`✅ Loaded ${pluginFiles.length} Plugins!`);
 
   // ✅ NEW: Send a message to the bot owner with the plugin count
-  const ownerNumber = "916238768108@s.whatsapp.net"; // Replace with your WhatsApp number
-  await conn.sendMessage(ownerNumber, { text: `✅ Bot started with ${pluginFiles.length} plugins loaded!` });
-
+  
   return pluginFiles.length;
 }
 
