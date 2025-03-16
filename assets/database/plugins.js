@@ -1,4 +1,47 @@
+const fs = require("fs");
+const path = require("path");
 const { default: got } = require("got");
+const config = require("../../config");
+const { DataTypes } = require("sequelize");
+
+const PluginDB = config.DATABASE.define("Plugin", {
+  name: { type: DataTypes.STRING, allowNull: false },
+  url: { type: DataTypes.TEXT, allowNull: false },
+});
+
+async function getandRequirePlugins(conn) {
+  let plugins = await PluginDB.findAll();
+  plugins = plugins.map((plugin) => plugin.dataValues);
+
+  plugins.forEach((plugin) => {
+    try {
+      got(plugin.url).then(async (res) => {
+        eval(res.body); // Load external plugin from URL
+      });
+    } catch (error) {
+      console.error("Failed to load plugin:", plugin.name, error);
+    }
+  });
+
+  // ✅ NEW: Auto-load local plugins from assets/plugins/
+  const pluginsPath = path.join(__dirname, "../plugins");
+  let pluginFiles = fs.readdirSync(pluginsPath).filter((file) => file.endsWith(".js"));
+
+  pluginFiles.forEach((file) => {
+    require(path.join(pluginsPath, file));
+  });
+
+  console.log(`✅ Loaded ${pluginFiles.length} Plugins!`);
+
+  // ✅ NEW: Send a message to the bot owner with the plugin count
+  const ownerNumber = "916238768108@s.whatsapp.net"; // Replace with your WhatsApp number
+  await conn.sendMessage(ownerNumber, { text: `✅ Bot started with ${pluginFiles.length} plugins loaded!` });
+
+  return pluginFiles.length;
+}
+
+module.exports = { getandRequirePlugins };
+/*const { default: got } = require("got");
 const config = require("../../config");
 const { DataTypes } = require("sequelize");
 
@@ -53,4 +96,4 @@ async function getandRequirePlugins() {
   });
 }
 
-module.exports = { PluginDB, installPlugin, getandRequirePlugins };
+module.exports = { PluginDB, installPlugin, getandRequirePlugins };*/
