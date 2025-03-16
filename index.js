@@ -58,6 +58,9 @@ const fetchSessionFromMega = async (sessionPath) => {
         return false;
     }
 };
+const express = require("express");
+const app = express();
+const port = process.env.PORT || 8000;
 
 // Function to connect to WhatsApp
 async function connectToWA() {
@@ -123,7 +126,13 @@ async function initialize() {
         console.log("✅ Plugins Installed!");
 
         // Start WhatsApp bot connection
-        connectToWA();
+        app.get("/", (req, res) => {
+    res.send("KEIKO XD🧚🏻");
+});
+app.listen(port, () => console.log(`Server listening on port http://localhost:${port}`));
+setTimeout(() => {
+    connectToWA();
+}, 4000);
     } catch (error) {
         console.error("Initialization error:", error);
         process.exit(1);
