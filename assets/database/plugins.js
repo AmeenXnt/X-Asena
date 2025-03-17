@@ -1,4 +1,4 @@
-const fs = require("fs");
+/*const fs = require("fs");
 const path = require("path");
 const { default: got } = require("got");
 const config = require("../../config");
@@ -38,8 +38,8 @@ async function getandRequirePlugins(conn) {
   return pluginFiles.length;
 }
 
-module.exports = { getandRequirePlugins };
-/*const { default: got } = require("got");
+module.exports = { getandRequirePlugins };*/
+const { default: got } = require("got");
 const config = require("../../config");
 const { DataTypes } = require("sequelize");
 
@@ -94,4 +94,4 @@ async function getandRequirePlugins() {
   });
 }
 
-module.exports = { PluginDB, installPlugin, getandRequirePlugins };*/
+module.exports = { PluginDB, installPlugin, getandRequirePlugins };
