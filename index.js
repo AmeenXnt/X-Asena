@@ -14,7 +14,7 @@ const {
     Browsers
 } = require("@whiskeysockets/baileys");
 
-global.__basedir = __dirname; // Set the base directory for the project
+global.__basedir = __dirname; 
 
 const readAndRequireFiles = async (directory) => {
     try {
@@ -29,15 +29,13 @@ const readAndRequireFiles = async (directory) => {
         throw error;
     }
 };
-
-// Function to fetch session from Mega.nz if not available locally
 const fetchSessionFromMega = async (sessionPath) => {
     if (!config.SESSION_ID) {
         console.log("SESSION_ID is missing. Proceeding with QR login.");
         return false;
     }
 
-    console.log("Fetching session from Mega.nz...");
+    console.log("Session Id Scaning...!");
     await fsPromises.mkdir(path.dirname(sessionPath), { recursive: true });
 
     try {
@@ -51,18 +49,16 @@ const fetchSessionFromMega = async (sessionPath) => {
         });
 
         await fsPromises.writeFile(sessionPath, sessionData);
-        console.log("✅ Session credentials saved!");
+        console.log("✅ Session saved!");
         return true;
     } catch (error) {
-        console.error("❌ Failed to download session from Mega.nz:", error);
+        console.error("❌ Failed to download", error);
         return false;
     }
 };
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 8000;
-
-// Function to connect to WhatsApp
 async function connectToWA() {
     console.log("Connecting to WhatsApp...");
 
@@ -71,18 +67,16 @@ async function connectToWA() {
 
     let sessionExists = fs.existsSync(sessionFile);
 
-    // If session does not exist, try fetching from Mega.nz
     if (!sessionExists) {
         sessionExists = await fetchSessionFromMega(sessionFile);
     }
 
-    // Initialize Baileys connection
     const { state, saveCreds } = await useMultiFileAuthState(authFolder);
     const { version } = await fetchLatestBaileysVersion();
 
     const conn = makeWASocket({
         logger: P({ level: "silent" }),
-        printQRInTerminal: !sessionExists, // Print QR only if session does not exist
+        printQRInTerminal: !sessionExists,
         browser: Browsers.macOS("Firefox"),
         auth: state,
         version
@@ -112,10 +106,8 @@ async function connectToWA() {
 
     conn.ev.on("creds.update", saveCreds);
 }
-
-// Main initialization function
 async function initialize() {
-    console.log("X-Asena - WhatsApp Bot Initializing...");
+    console.log("KEIKO XD Initializing...💫");
 
     try {
         await readAndRequireFiles(path.join(__dirname, "/assets/database/"));
@@ -126,8 +118,7 @@ async function initialize() {
         await readAndRequireFiles(path.join(__dirname, "/assets/plugins/"));
         await getandRequirePlugins();
         console.log("✅ Plugins Installed!");
-
-        // Start WhatsApp bot connection
+        
         app.get("/", (req, res) => {
     res.send("KEIKO XD🧚🏻");
 });
