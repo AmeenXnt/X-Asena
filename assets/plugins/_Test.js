@@ -1,5 +1,5 @@
 const { command } = require("../../lib");
-
+/*
 command(
   {
     pattern: "test",
@@ -11,7 +11,7 @@ command(
     await message.sendMessage(message.chat, { text: "Pong!" }, { quoted: message });
   }
 );
-
+*/
 command(
   {
     pattern: 'e',
