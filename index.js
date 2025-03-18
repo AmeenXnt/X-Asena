@@ -5,6 +5,7 @@ const { getandRequirePlugins } = require("./assets/database/plugins");
 const plugins = require("./lib/plugins");
 const { File } = require("megajs");
 const P = require("pino");
+const figlet = require("figlet")
 const express = require("express");
 
 const { serialize, Greetings } = require("./lib/index");
@@ -13,7 +14,20 @@ const { PausedChats } = require("./assets/database");
 const { Image, Message, Sticker, Video, AllMessage } = require("./lib/Messages");
 
 const { default: makeWASocket, useMultiFileAuthState, DisconnectReason, fetchLatestBaileysVersion, Browsers } = require("@whiskeysockets/baileys");
-
+figlet(
+  'XD BOT',
+  {
+    horizontalLayout: 'default',
+    verticalLayout: 'default',
+  },
+  (err, data) => {
+    if (err) {
+      console.error(chalk.red('Figlet error:', err))
+      return
+    }
+    console.log(chalk.magenta(data))
+  }
+)
 global.__basedir = __dirname;
 const app = express();
 const port = process.env.PORT || 8000;
