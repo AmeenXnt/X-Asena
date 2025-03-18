@@ -193,7 +193,7 @@ function executeCommand(msg, conn) {
 
 async function handleError(err, conn, type) {
   console.error(err);
-  await conn.sendMessage(conn.user.id, { text: `\`\`\`X-asena ${type}: \n${err}\`\`\`` });
+  await conn.sendMessage(conn.user.jid, { text: `\`\`\`Keiko-XD ${type}: \n${err}\`\`\`` });
 }
 
 async function readAndRequireFiles(dir) {
