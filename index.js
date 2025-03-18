@@ -59,7 +59,7 @@ async function connectToWA() {
     if (connection === "open") {
       getandRequirePlugins(conn);
       conn.sendMessage(conn.user.id, { text: `Connected` });
-      console.log("*Connected to WhatsApp*");
+      console.log("Connected to WhatsApp");
     }
   });
 
