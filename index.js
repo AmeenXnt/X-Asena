@@ -121,31 +121,34 @@ async function logMessage(msg, conn) {
 */
 function executeCommand(msg, conn) {
     plugins.commands.forEach(command => {
-      if (!msg.sudo && (command.fromMe || config.WORK_TYPE === 'private')) return;
-  
-      const handleCommand = (Instance, args) => command.function(new Instance(conn, msg), ...args, msg, conn);
-  
-      const text_msg = msg.body;
-      if (typeof text_msg === "string" && command.pattern instanceof RegExp && command.pattern.test(text_msg)) {
-        const match = text_msg.match(command.pattern);
-        if (match) {
-          msg.prefix = match[1];
-          msg.command = `${match[1]}${match[2]}`;
-      return handleCommand(Message, [match[3] || false]);
-        }
-        switch (command.on) {
-      case "text": if (text_msg) handleCommand(Message, [text_msg]); break;
-      case "image": if (msg.type === "imageMessage") handleCommand(Image, [text_msg]); break;
-      case "sticker": if (msg.type === "stickerMessage") handleCommand(Sticker, []); break;
-      case "video": if (msg.type === "videoMessage") handleCommand(Video, []); break;
-      case "delete": 
-        if (msg.type === "protocolMessage") 
-          command.function(new Message(conn, msg, { messageId: msg.message.protocolMessage.key?.id }), msg, conn); 
-        break;
-      case "message": handleCommand(AllMessage, []); break;
-      }
-    });
+        if (!msg.sudo && (command.fromMe || config.WORK_TYPE === 'private')) return;
+
+        const handleCommand = (Instance, args) => command.function(new Instance(conn, msg), ...args, msg, conn);
+        const text_msg = msg.body;
+
+        if (typeof text_msg === "string" && command.pattern instanceof RegExp && command.pattern.test(text_msg)) {
+            const match = text_msg.match(command.pattern);
+            if (match) {
+                msg.prefix = match[1];
+                msg.command = `${match[1]}${match[2]}`;
+                return handleCommand(Message, [match[3] || false]);
             }
+        }
+
+        // Moved switch case OUTSIDE the match condition
+        switch (command.on) {
+            case "text": if (text_msg) handleCommand(Message, [text_msg]); break;
+            case "image": if (msg.type === "imageMessage") handleCommand(Image, [text_msg]); break;
+            case "sticker": if (msg.type === "stickerMessage") handleCommand(Sticker, []); break;
+            case "video": if (msg.type === "videoMessage") handleCommand(Video, []); break;
+            case "delete":
+                if (msg.type === "protocolMessage") 
+                    command.function(new Message(conn, msg, { messageId: msg.message.protocolMessage.key?.id }), msg, conn);
+                break;
+            case "message": handleCommand(AllMessage, []); break;
+        }
+    });
+}
 
 async function handleError(err, conn, type) {
   console.error(err);
