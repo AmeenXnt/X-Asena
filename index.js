@@ -119,7 +119,7 @@ async function logMessage(msg, conn) {
   });
 }
 */
-function executeCommand(msg, conn) {
+/*function executeCommand(msg, conn) {
     plugins.commands.forEach(command => {
         if (!msg.sudo && (command.fromMe || config.WORK_TYPE === 'private')) return;
 
@@ -146,6 +146,47 @@ function executeCommand(msg, conn) {
                     command.function(new Message(conn, msg, { messageId: msg.message.protocolMessage.key?.id }), msg, conn);
                 break;
             case "message": handleCommand(AllMessage, []); break;
+        }
+    });
+}*/ // working
+function executeCommand(msg, conn) {
+    plugins.commands.forEach(command => {
+        if (command.fromMe && !config.SUDO.split(",").includes(msg.sender.split("@")[0]) && !msg.isSelf) return;
+
+        let text_msg = msg.body;
+        let quoted = msg.quoted ? msg.quoted.body || false : false; // Extract quoted message (if available)
+        let comman;
+
+        if (text_msg) {
+            comman = text_msg.trim().split(/ +/)[0]; // Extract first word as command
+            msg.prefix = new RegExp(config.HANDLERS).test(text_msg)
+                ? text_msg.split("").shift()
+                : ","; // Identify prefix
+        }
+
+        if (command.pattern && command.pattern.test(comman)) {
+            let match;
+            try {
+                match = text_msg.replace(new RegExp(comman, "i"), "").trim();
+            } catch {
+                match = false;
+            }
+
+            // Create a message instance and execute the function
+            let whats = new Message(conn, msg);
+            command.function(whats, match, msg, conn, quoted);
+        } else if (text_msg && command.on === "text") {
+            let whats = new Message(conn, msg);
+            command.function(whats, text_msg, msg, conn, quoted);
+        } else if ((command.on === "image" || command.on === "photo") && msg.type === "imageMessage") {
+            let whats = new Image(conn, msg);
+            command.function(whats, text_msg, msg, conn, quoted);
+        } else if (command.on === "sticker" && msg.type === "stickerMessage") {
+            let whats = new Sticker(conn, msg);
+            command.function(whats, msg, conn, quoted);
+        } else if (command.on === "video" && msg.type === "videoMessage") {
+            let whats = new Video(conn, msg);
+            command.function(whats, msg, conn, quoted);
         }
     });
 }
