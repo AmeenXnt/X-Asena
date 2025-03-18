@@ -7,7 +7,7 @@ command(
     desc: "Check if the bot is working",
     type: "user",
   },
-  async (message, match, conn) => {
-    await conn.sendMessage(message.chat, { text: "Pong!" }, { quoted: message });
+  async (message, match) => {
+    await message.sendMessage(message.chat, { text: "Pong!" }, { quoted: message });
   }
 );
