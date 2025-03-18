@@ -6,6 +6,7 @@ const plugins = require("./lib/plugins");
 const { File } = require("megajs");
 const P = require("pino");
 const figlet = require("figlet")
+const chalk = require("chalk")
 const express = require("express");
 
 const { serialize, Greetings } = require("./lib/index");
