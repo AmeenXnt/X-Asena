@@ -134,7 +134,7 @@ async function logMessage(msg, conn) {
   });
 }
 */
-/*function executeCommand(msg, conn) {
+function executeCommand(msg, conn) {
     plugins.commands.forEach(command => {
         if (!msg.sudo && (command.fromMe || config.WORK_TYPE === 'private')) return;
 
@@ -163,8 +163,8 @@ async function logMessage(msg, conn) {
             case "message": handleCommand(AllMessage, []); break;
         }
     });
-}*/ // working
-function executeCommand(msg, conn) {
+}
+/*function executeCommand(msg, conn) {
     plugins.commands.forEach(command => {
         if (command.fromMe && !config.SUDO.split(",").includes(msg.sender.split("@")[0]) && !msg.isSelf) return;
 
@@ -205,7 +205,7 @@ function executeCommand(msg, conn) {
         }
     });
 }
-
+*/
 async function handleError(err, conn, type) {
   console.error(err);
   await conn.sendMessage(conn.user.jid, { text: `\`\`\`Keiko-XD ${type}: \n${err}\`\`\`` });
